@@ -1,11 +1,10 @@
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class State {
 
     private String nameOfState;
-    private Map<String, String> transition = new HashMap<>(); // alphabet input, name of state
+    private Map<String, State> transition = new HashMap<>(); // alphabet input, name of state
 
     public State(String name) {
         this.nameOfState = name;
@@ -15,21 +14,20 @@ public class State {
         return this.nameOfState;
     }
 
-    public void createTransition(String[] alphabet) {
-        Scanner s = new Scanner(System.in);
-        for( String a : alphabet ) {
-            System.out.println("Which state should >" + a + "< go to (for state " + this.nameOfState + ")?");
-            String nextState = s.nextLine();
-            if ( nextState != "null" || nextState != "" ) {
-                this.transition.put(a, nextState );
-            } else {
-                this.transition.put(a, null);
-            }
-        }
+    public void createTransition(String c, State s) { // the path c to the next state s
+        this.transition.put(c, s);
     }
 
-    public String getTransition(String a) {
+    public State getTransition(String a) {
         return this.transition.get(a);
     }
-    // each state has a map that points to a different state based on the input
+
+    public State[] getTransitions(String[] alphabet) {
+        State[] transitions = new State[alphabet.length];
+        for( int i=0; i<alphabet.length; i++ ) {
+            transitions[i] = this.transition.get(alphabet[i]);
+        }
+
+        return transitions;
+    }
 }

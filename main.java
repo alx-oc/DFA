@@ -7,5 +7,8 @@ public class main{
         System.out.println(test.returnInfo());
 
         test.setup();
+        test.runInputTape("ccabcac");
+
+        System.out.println(test.getCurrentState());
     }
 }
