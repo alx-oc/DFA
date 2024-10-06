@@ -10,5 +10,7 @@ public class main{
         test.runInputTape("ccabcac");
 
         System.out.println(test.getCurrentState());
+
+        System.out.println(test.hasReachedAcceptState());
     }
 }

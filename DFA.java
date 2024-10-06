@@ -19,8 +19,10 @@ public class DFA {
         this.states = createStates();
         this.currentState = this.states[0];
         
-        this.userInputTransitions();
-        this.printTransitionTable();
+        printTransitionTable();
+        userInputTransitions();
+        
+        this.acceptanceStates = userInputAcceptanceStates();
     }
 
     public void runInputTape(String tape) {
@@ -44,6 +46,16 @@ public class DFA {
         return "Number of States >> " + this.noOfStates + "\nAlphabet >> " + Arrays.toString(this.alphabet) + "\nStates >> " + Arrays.toString(this.states);
     }
 
+    public boolean hasReachedAcceptState() {
+        for( State s : this.acceptanceStates ) {
+            if( s == this.currentState ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private State[] createStates() {
         State[] s = new State[this.noOfStates];
         for( int i=0; i<noOfStates; i++ ) {
@@ -61,18 +73,36 @@ public class DFA {
             for( String c : this.alphabet ) {
                 System.out.println("Which state should >" + c + "< go to (for state " + s + ")?");
                 String nextState = scan.nextLine();
-                s.createTransition(c, checkIfValidTransition(nextState));
+                s.createTransition(c, checkIfValidState(nextState));
             }
         }
     }
 
-    private State checkIfValidTransition(String nextState) {
+    private State checkIfValidState(String state) {
         for( State s : this.states ) {
-            if( s.toString().equals(nextState) ) {
+            if( s.toString().equals(state) ) {
                 return s;
             }
         }
         return null;
+    }
+
+    private State[] userInputAcceptanceStates() {
+        Scanner scan = new Scanner(System.in);
+        int nextIndex = 0;
+
+        System.out.println("How many acceptance states are there");
+        State[] acceptanceStates = new State[scan.nextInt()];
+        scan.nextLine();
+
+        System.out.println("Enter the acceptance states (seperated by a space)");
+        String s = scan.nextLine();
+        String[] acceptanceStatesInput = s.split(" ");
+
+        for( String as : acceptanceStatesInput ) {
+            acceptanceStates[nextIndex++] = checkIfValidState(as);
+        }
+        return acceptanceStates;
     }
 
     private String[][] printTransitionTable() {
